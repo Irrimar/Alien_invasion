@@ -1,7 +1,7 @@
 """Создание класса Settings."""
 
 
-class Settings():
+class Settings:
     """Класс для хранения всех настроек игры Alien Invasion."""
 
     def __init__(self) -> None:

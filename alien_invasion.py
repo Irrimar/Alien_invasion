@@ -2,6 +2,8 @@
 import sys
 import pygame
 
+from settings import Settings
+
 
 class AlienInvasion:
     """Класс управления ресурсами и поведением игры."""
@@ -9,11 +11,14 @@ class AlienInvasion:
     def __init__(self) -> None:
         """Инициализирует игру и создает игровые ресурсы."""
         pygame.init()
-        self.screen = pygame.display.set_mode((1200, 800))
+        self.settings = Settings()
+
+        self.screen = pygame.display.set_mode(
+            (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
 
         # Назначение цвета фона.
-        self.bg_color = (230, 230, 230)
+        self.bg_color = (self.settings.bg_color)
 
     def run_game(self) -> None:
         """Запуск основного цикла."""
