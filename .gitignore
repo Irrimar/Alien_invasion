@@ -1,0 +1,13 @@
+### Python templates
+# Byte-compiled / optomized / DLL files
+__pycache__/
+# *.py[cod]
+log/
+resourses/products.json
+tmp/
+.vscode/
+.mypy_cach/
+env/
+setup.cfg
+!_alien_invasion.code-workspace
+docker-compose.yaml
