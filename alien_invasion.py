@@ -18,7 +18,7 @@ class AlienInvasion:
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
 
-        self.ship = Ship(self.screen)
+        self.ship = Ship(self)
 
         # Назначение цвета фона.
         self.bg_color = (self.settings.bg_color)
