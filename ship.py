@@ -19,7 +19,7 @@ class Ship():
         self.rect.midbottom = self.screen_rect.midbottom
 
         # Сохранение вещественной координаты центра корабля.
-        self.x = int(self.rect.x)
+        self.x = float(self.rect.x)
 
         # Флаг перемещения.
         self.moving_right = False
