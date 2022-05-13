@@ -1,9 +1,10 @@
 """Создание класса, представляющее окно игры."""
-from cmath import rect
 import sys
 import pygame
+from time import sleep
 
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -25,6 +26,9 @@ class AlienInvasion:
         # self.screen = pygame.display.set_mode((0, 0) , pygame.FULLSCREEN)
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
+
+        # Создание экземпляра для хранения игровой статистики.
+        self.stats = GameStats(self)
 
         pygame.display.set_caption("Alien Invasion")
 
@@ -93,7 +97,11 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
-        # Проверка попаданий в пришельцев.
+        # Проверка на столкновение пули и пришельца.
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self) -> None:
+        '''Обработка коллизий снарядов с пришельцами.'''
         # При обнаружении попадания удалить снаряд и пришельца.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True
@@ -109,6 +117,10 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
 
+        # Проверка коллизий "пришелец - корабль".
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            self._ship_hit()
+
     def _create_fleet(self) -> None:
         """Создание флота вторжения."""
         # Создание пришельца.
@@ -120,7 +132,7 @@ class AlienInvasion:
         # Определяем количество рядов, помещающихся на экране.
         ship_height = self.ship.rect.height
         avaliable_space_y = (self.settings.screen_height -
-                                (3 * alien_height) - ship_height)
+                             (3 * alien_height) - ship_height)
         number_rows = avaliable_space_y // (2 * alien_height)
 
         # Создание первого ряда пришельцев.
@@ -150,6 +162,22 @@ class AlienInvasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
+
+    def _ship_hit(self) -> None:
+        """Обрабатывается столкновение корабля с пришельцем."""
+        # Уменьшение ship_left.
+        self.stats.ships_left -= 1
+
+        # Очистка списка пришельцев и снарядов.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        #Создание нового флота и размещение корябля в центре.
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Пауза.
+        sleep(0.5)
 
     def _update_screen(self) -> None:
         """Обновляет изображение на экране и отображает новый экран."""
