@@ -89,6 +89,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             self.stats.game_active = True
             self.sb.prep_score()
+            self.sb.prep_level()
 
             # Очистка списка пришельцев и снарядов.
             self.aliens.empty()
@@ -155,6 +156,10 @@ class AlienInvasion:
             self._create_fleet()
             self.settings.increase_speed()
 
+            # Увеличение уровня.
+            self.stats.level += 1
+            self.sb.prep_level()
+
     def _update_aliens(self) -> None:
         """Обновление позиции всех пришельцев во флоте."""
         self._check_fleet_edges()
@@ -184,7 +189,7 @@ class AlienInvasion:
         # Создание первого ряда пришельцев.
         for row_number in range(number_rows):
             for alien_number in range(number_alien_x):
-            # Создание пришельца и размещение его вряду.
+            #Создание пришельца и размещение его вряду.
                 self._create_alien(alien_number, row_number)
 
     def _create_alien(self, alien_number: int, row_number: int) -> None:
@@ -193,7 +198,7 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien_height * 2 + 2 * alien_height * row_number
         self.aliens.add(alien)
 
     def _check_fleet_edges(self) -> None:

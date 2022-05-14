@@ -1,8 +1,9 @@
 """Создание класса для управления кораблем."""
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship():
+class Ship(Sprite):
     """Класс для управления кораблем."""
 
     def __init__(self, ai_game) -> None:
