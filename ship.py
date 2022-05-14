@@ -1,14 +1,13 @@
-"""Создание класса для управления кораблем."""
 import pygame
 from pygame.sprite import Sprite
 
-
 class Ship(Sprite):
-    """Класс для управления кораблем."""
+    """Classes for managing spaceships"""
 
     def __init__(self, ai_game) -> None:
         """Инициализирует корабль и задает его начальную позицию."""
-        self.screen = ai_game
+        super().__init__()
+        self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
 
@@ -26,6 +25,10 @@ class Ship(Sprite):
         self.moving_right = False
         self.moving_left = False
 
+    def blitme(self) -> None:
+        """Рисует корабль в текущей позиции."""
+        self.screen.blit(self.image, self.rect)
+
     def update(self) -> None:
         """Обновляет позиции корабля с учетом флагов."""
         # Переместить корабль.
@@ -37,10 +40,6 @@ class Ship(Sprite):
 
         # Обновление статуса rect на соновании self.x.
         self.rect.x = self.x
-
-    def blitme(self) -> None:
-        """Рисует корабль в текущей позиции."""
-        self.screen.screen.blit(self.image, self.rect)
 
     def center_ship(self) -> None:
         # Размещает корабль в центре нижней стороны.

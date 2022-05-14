@@ -39,7 +39,7 @@ class Settings:
 
     def initialize_dynamic_settings(self) -> None:
         """Инициализирует настройки изменяющиеся в ходе игры."""
-        self.ship_speed = self.ship_speed_start
+        self.ship_speed += 0.2 #self.ship_speed_start
         self.bullet_speed = self.bullet_speed_start
         self.alien_speed = self.alien_speed_start
         self.alien_points = self.alien_points_start
@@ -49,7 +49,7 @@ class Settings:
 
     def increase_speed(self) -> None:
         """Увеличение настройки скорости."""
-        self.ship_speed *= self.speedup_scale
-        self.bullet_speed *= self.speedup_scale
+        self.ship_speed += self.speedup_scale
+        self.bullet_speed = self.speedup_scale
         self.alien_speed *= self.speedup_scale
         self.alien_points = int(self.alien_points * self.score_scale)
