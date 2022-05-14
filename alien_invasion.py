@@ -7,8 +7,9 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
-from game_stats import GameStats
 from button import Button
+from game_stats import GameStats
+from scoreboard import Scoreboard
 
 
 class AlienInvasion:
@@ -28,8 +29,10 @@ class AlienInvasion:
         # self.settings.screen_width = self.screen.get_rect().width
         # self.settings.screen_height = self.screen.get_rect().height
 
-        # Создание экземпляра для хранения игровой статистики.
+        # Создание экземпляра для хранения игровой статистики
+        # и панели результатов.
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         pygame.display.set_caption("Alien Invasion")
 
@@ -81,10 +84,11 @@ class AlienInvasion:
         if button_clicked and not self.stats.game_active:
             # Сброс игровых настроек.
             self.settings.initialize_dynamic_settings()
-            
+
             # Сброс игровой статистики.
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()
 
             # Очистка списка пришельцев и снарядов.
             self.aliens.empty()
@@ -133,11 +137,17 @@ class AlienInvasion:
         self._check_bullet_alien_collisions()
 
     def _check_bullet_alien_collisions(self) -> None:
-        '''Обработка коллизий снарядов с пришельцами.'''
+        """Обработка коллизий снарядов с пришельцами."""
         # При обнаружении попадания удалить снаряд и пришельца.
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.aliens, True, True
         )
+
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
 
         if not self.aliens:
             # Уничтожение существующих снарядов и создание нового флота.
@@ -237,6 +247,9 @@ class AlienInvasion:
             bullet.draw_bullet()
 
         self.aliens.draw(self.screen)
+
+        # Вывод информации о счете.
+        self.sb.show_score()
 
         # Кнопка Play отображается в том случае, если игра не активна.
         if not self.stats.game_active:
