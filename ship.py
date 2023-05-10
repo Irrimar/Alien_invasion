@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 
+
 class Ship(Sprite):
     """Classes for managing spaceships"""
 
